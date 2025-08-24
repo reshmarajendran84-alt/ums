@@ -16,7 +16,11 @@ const securePassword = async(password)=>{
 const sendVerifyMail = async (name, email, user_id) => {
     try {
         const transporter = nodemailer.createTransport({
-  service: "gmail",
+            service: "gmail",
+            host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      requireTLS: true,
             auth: {
                 user: 'reshmarajendaranrajendran333@gmail.com',  
                 pass: 'glmvdngjbcxddwgd'
@@ -72,10 +76,10 @@ const insertUser =async(req,res)=>{
         const userDate = await user.save();
         if(userDate){
 sendVerifyMail(req.body.name, req.body.email, userDate._id);
-            res.render('registration',{meaagse:"your registration has been successfully,please verify email"});
+            res.render('registration',{message:"your registration has been successfully,please verify email"});
         }
         else{
-            res.render('registration',{meaagse:"your registration has been  failed"});
+            res.render('registration',{message:"your registration has been  failed"});
         }
     }catch(error){
         console.log(error.message);
@@ -93,8 +97,71 @@ const verifyMail = async(req,res)=>{
         console.log(error.message);
     }
 }
+
+// login user methods started
+
+const loginLoad = async(req,res)=>{
+    try{
+        res.render('login');
+    }catch(error){
+    console.log(error.message);
+
+    }
+}
+
+const verifyLogin =async(req,res)=>{
+    try{
+        const email =req.body.email;
+        const password = req.body.password;
+        const userDate =await User.findOne({email:email})
+        if(userDate){
+            const passwordMatch = await bcrypt.compare(password,userDate.password)
+            if(passwordMatch){
+                if(userDate.is_verified === 0){
+res.render('login', { message: "Invalid email or password" });
+
+                }else{
+req.session.user_id = userDate._id;
+                    res.redirect('/home');
+                }
+            }else{
+                res.render('login',{messgae:"password incorrect"});
+            }
+        }else{
+            res.render('login',{message:"Email and password is incorrect"});
+        }
+    }catch(error){
+        console.log(error.message);
+
+    }
+}
+
+const loadHome =async(req,res)=>{
+    try{
+res.render('home');
+    }catch{
+
+        console.log(error.message);p
+    }
+
+}
+
+//forget password 
+const forgetLoad =async(req,res)=>{
+    try{
+
+        res.render('forget');
+    }catch(error){
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     loadRegister,
     insertUser,
-    verifyMail
+    verifyMail,
+    loginLoad,
+    verifyLogin,
+    loadHome,
+    forgetLoad,
 }
