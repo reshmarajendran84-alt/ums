@@ -42,7 +42,18 @@ user_route.get('/login',auth.isLogout,userController.loginLoad);
 user_route.post('/login', userController.verifyLogin);
 user_route.get('/home', auth.isLogin, userController.loadHome);
 user_route.get('/forget',auth.isLogout,userController.forgetLoad);
+user_route.post('/forget',userController.forgetVerify);
+user_route.get('/forget-password',auth.isLogout,userController.forgetPasswordLoad);
+user_route.post('/forget-password',userController.resetPassword);
 
+
+user_route.use(session({
+    secret: config.sessionSecret,
+    resave: false,
+    saveUninitialized: false
+}));
+console.log("Auth:", auth);
+console.log("UserController:", userController);
 
 
 module.exports =user_route;
