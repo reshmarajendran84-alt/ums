@@ -17,14 +17,10 @@
 
 
 </form>
-<%
+<% if (typeof message !== 'undefined' && message) { %>
+  <div style="color: green; font-weight: bold; margin-bottom: 10px;">
+    <%= message %>
+  </div>
+<% } %>
 
-if(typeof message !=='undefined'){
-    %>
-    <p style="color: green;"><%= message %></p>
-    <%
-}
-
-
-%>
 <% include('../layouts/footer.ejs')%>

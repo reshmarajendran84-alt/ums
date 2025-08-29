@@ -31,12 +31,22 @@ const userSchema = new mongoose.Schema({
     is_varified:{
         type:Number,
         default:0
-    },
-    token:{
+    },    token:{
         type:String,
         default:''
+    },
+    role: {
+        type: String,
+        enum: ["user", "admin"],
+        default: "user"
     }
+
+
 
 });
 
-module.exports = mongoose.model('User',userSchema);
+// module.exports = mongoose.model('User',userSchema);
+// Check if the model exists before creating it
+const User = mongoose.models.User || mongoose.model("User", userSchema);
+
+module.exports = User;
