@@ -1,75 +1,40 @@
-const express = require('express');
-const admin_route = express();
-const bodyParser = require('body-parser');
-const session = require('express-session');
-const multer = require("multer");
-const path = require("path");
-const config = require('../config/config');
-const adminController = require('../controllers/adminController');
-const auth = require('../middleware/adminAuth');
+const express = require("express");
+const adminController = require("../controllers/adminController");
+const adminAuth = require("../middleware/adminAuth");
 
-// Set view engine
-admin_route.set('view engine', 'ejs');
-admin_route.set("views", path.join(__dirname, "../views/admin")); // ✅ fixed path (lowercase "views")
+const router = express.Router();
 
-admin_route.use(bodyParser.json());
-admin_route.use(bodyParser.urlencoded({ extended: true }));
+// login page
+router.get("/", adminAuth.isLogout, adminController.loginLoad);
+router.post("/", adminController.verifyLogin);
 
-// Static files (public folder)
-admin_route.use(express.static(path.join(__dirname, "../public")));
+// home page
+router.get("/home", adminAuth.isLogin, adminController.loadDashboard);
 
-// Multer setup for file uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../public/userImages"));
-  },
-  filename: function (req, file, cb) {
-    const name = Date.now() + "-" + file.originalname;
-    cb(null, name);
-  },
-});
+// logout
+router.get("/logout", adminAuth.isLogin, adminController.logoutLoad);
 
-const upload = multer({ storage: storage });
+// forget password
+router.get("/forget", adminAuth.isLogout, adminController.forgetLoad);
+router.post("/forget", adminController.forgetVerify);
 
-// Session setup
-admin_route.use(
-  session({
-    secret: config.sessionSecret,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 60000 * 10 },
-  })
-);
+// reset password
+router.get("/forget-password", adminAuth.isLogout, adminController.forgetPasswordLoad);
+router.post("/forget-password", adminController.forgetPasswordVerify);
 
-// ---------------- Routes ----------------
+// dashboard
+// dashboard
+router.get("/dashboard", adminAuth.isLogin, adminController.dashboardLoad);
 
-// Login
-admin_route.get('/', auth.isLogout, adminController.loginLoad);
-admin_route.post('/', adminController.verifyLogin);
+// add user
+router.get("/addUser", adminAuth.isLogin, adminController.addUserLoad);
+router.post("/addUser", adminController.addUserVerify);
 
-// Dashboard (home)
-admin_route.get('/dashboard', auth.isLogin, adminController.dashboardLoad);
+// edit user
+router.get("/edit", adminAuth.isLogin, adminController.editUserLoad);
+router.post("/edit", adminController.updateProfile);
 
-// Logout
-admin_route.get('/logout', auth.isLogin, adminController.logoutLoad);
+// delete user
+router.get("/deleteUser", adminAuth.isLogin, adminController.deleteUser);
 
-// Forget password
-admin_route.get('/forget', auth.isLogout, adminController.forgetLoad);
-admin_route.post('/forget', adminController.forgetVerify);
-
-// Reset password
-admin_route.get('/forget-password', adminController.forgetPasswordLoad);
-admin_route.post('/forget-password', adminController.forgetPasswordVerify);
-
-// Add user
-admin_route.get('/add', auth.isLogin, adminController.addUserLoad);
-admin_route.post('/add', upload.single("image"), adminController.addUserVerify);
-
-// Edit user
-admin_route.get('/edit-user', auth.isLogin, adminController.editUserLoad);
-admin_route.post('/edit-user', adminController.updateProfile);
-
-// Delete user
-admin_route.get('/delete-user', adminController.deleteUser);
-
-module.exports = admin_route;
+module.exports = router;

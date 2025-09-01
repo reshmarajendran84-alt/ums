@@ -39,14 +39,17 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ["user", "admin"],
         default: "user"
-    }
+    },
+    token: {
+         type: String,
+         default: '' 
+    }, // for reset/verification
+    profileImage: {
+         type: String 
+        } // if you allow profile upload with multer
+}, { timestamps: true });
 
 
-
-});
-
-// module.exports = mongoose.model('User',userSchema);
-// Check if the model exists before creating it
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 
 module.exports = User;

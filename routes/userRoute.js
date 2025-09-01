@@ -10,7 +10,7 @@ const auth = require("../middleware/auth");
 
 //for view engine
 user_route.set("view engine", "ejs");
-user_route.set("views", path.join(__dirname, "../view/users"));
+user_route.set("views", path.join(__dirname, "../views/users"));
 
 user_route.use(bodyPraser.json());
 user_route.use(bodyPraser.urlencoded({ extended: true }));

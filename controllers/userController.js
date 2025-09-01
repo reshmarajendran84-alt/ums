@@ -1,3 +1,4 @@
+
 const User = require("../Models/userModel");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
@@ -134,7 +135,7 @@ const verifyMail = async (req, res) => {
 //for Login User Page Function
 const loginLoad = async (req, res) => {
   try {
-    res.render("login");
+res.render("login");
   } catch (error) {
     console.log(error.message);
   }
