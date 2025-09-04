@@ -1,13 +1,17 @@
 const express = require("express");
-const adminController = require("../controllers/adminController");
 const adminAuth = require("../middleware/adminAuth");
+const adminController = require("../controllers/adminController");
 
 const router = express.Router();
 
 // login page
 router.get("/", adminAuth.isLogout, adminController.loginLoad);
 router.post("/", adminController.verifyLogin);
+// Login page (GET - show login form)
+router.get("/login", adminController.loginLoad);
 
+// Login submit (POST - handle login form)
+router.post("/login", adminController.verifyLogin);
 // home page
 router.get("/home", adminAuth.isLogin, adminController.loadDashboard);
 
@@ -23,8 +27,7 @@ router.get("/forget-password", adminAuth.isLogout, adminController.forgetPasswor
 router.post("/forget-password", adminController.forgetPasswordVerify);
 
 // dashboard
-// dashboard
-router.get("/dashboard", adminAuth.isLogin, adminController.dashboardLoad);
+router.get("/dashboard", adminController.loadDashboard);
 
 // add user
 router.get("/addUser", adminAuth.isLogin, adminController.addUserLoad);

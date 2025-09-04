@@ -1,55 +1,39 @@
 const mongoose = require("mongoose");
 
-
 const userSchema = new mongoose.Schema({
-    name:{
-        type:String,
-        require:true
-    },
-    email:{type:String,
-        require:true
-    },
-    mobile:{
-        type:String,
-        require:true
+  name: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  mobile: {
+    type: String,
+    required: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  is_admin: {
+    type: Number,
+    default: 0
+  },
+  is_verified: {
+    type: Boolean,
+    default: false
+  },
+  is_blocked: {
+    type: Boolean,
+    default: false
+  },
+  token: { type: String, default: "" }
 
-    },
-    image:
-    {
-        type:String,
-        require:true
-    },
-    password:
-    {
-        type:String,
-        require:true
-    },
-    is_admin:{
-        type:Number,
-        require:true
-    },
-    is_varified:{
-        type:Number,
-        default:0
-    },    token:{
-        type:String,
-        default:''
-    },
-    role: {
-        type: String,
-        enum: ["user", "admin"],
-        default: "user"
-    },
-    token: {
-         type: String,
-         default: '' 
-    }, // for reset/verification
-    profileImage: {
-         type: String 
-        } // if you allow profile upload with multer
-}, { timestamps: true });
+});
 
-
+// ✅ Fix: Prevent OverwriteModelError
 const User = mongoose.models.User || mongoose.model("User", userSchema);
-
 module.exports = User;

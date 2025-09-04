@@ -1,38 +1,56 @@
-
-<% include("../layouts/header.ejs") %>
-
-
+<%- include("../layouts/header.ejs") %>
+ <br>
+<br>
+    
+    <div class="cont">
+        <div class="form sign-in">
+         
 <h1>Admin Login</h1>
 
-<% if(typeof message !== "undefined"){
-    %>
-    <h4><%= message %></h4>
-    <%
+<% if(typeof message !== "undefined"){ %>
+  <h4><%= message %></h4>
+<% } %>
 
-}
-%>
+            <h1 class="text-4xl font-bold title mb-2">Welcome Back</h1>
+<h3 class="text-white opacity-80">Enter your email address and password to access admin panel.</h3>
+</div>
 
-<form action="" method="post">
+<form action="/admin/login" method="POST">  
+  
+  <div class="space-y-4">
+                <div>
+                    <div class="flex items-center mb-1">
+                      <i class="fas fa-envelope text-white mr-2 opacity-80"></i>
+                      <label for="email" class="text-white text-sm opacity-80">Email Address</label>
+                    </div>
+                    <input type="email" id="email"name="email" class="input-field" placeholder="Enter your email">
+                </div>
+                
+                <div>
+                    <div class="flex items-center mb-1">
+                        <i class="fas fa-lock text-white mr-2 opacity-80"></i>
+                        <label for="password" class="text-white text-sm opacity-80">Password</label>
+                    </div>
+                    <input type="password"name="password" id="password" class="input-field" placeholder="Enter your password">
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <a href="/admin/forget" class="text-white text-sm opacity-80 hover:opacity-100 hover:text-cyan-300 transition">Forgot Password?</a>
 
-    <input type="email" name="email" placeholder="Enter Your Email">
-    <br><br>
-    <input type="password" name="password" placeholder="Enter Your Password">
-    <br><br>
-    <input type="submit" value="login">
-
+            
+            <button type="submit" class="w-full btn-login font-medium">LOGIN</button>
+        </form>
 </form>
-
-<a href="/admin/forget">Forget Password</a>
 
 
 <script>
-  // Force a reload from server if user comes via back/forward button
+  // Force reload from server when navigating back
   window.addEventListener("pageshow", function (event) {
     if (event.persisted || (window.performance && performance.navigation.type === 2)) {
-      window.location.reload(); // Reload to trigger session check
+      window.location.reload();
     }
   });
 </script>
 
-
-<% include("../layouts/footer.ejs") %>
+<%- include("../layouts/footer.ejs") %>

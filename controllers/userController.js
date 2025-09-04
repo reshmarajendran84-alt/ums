@@ -1,5 +1,5 @@
 
-const User = require("../Models/userModel");
+const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const randomstring = require("randomstring");
@@ -96,7 +96,7 @@ const insertUser = async (req, res) => {
     const user = new User({
       name: req.body.name,
       email: req.body.email,
-      mobile: req.body.mno,
+      mobile: req.body.mobile,
       image: req.file.filename,
       password: spassword,
       is_admin: 0,
@@ -121,11 +121,12 @@ const insertUser = async (req, res) => {
 //for Verify Mail Function
 const verifyMail = async (req, res) => {
   try {
-    const updateInfo = await User.updateOne(
-      { _id: req.query.id },
-      { $set: { is_varified: 1 } }
-    );
-    console.log(updateInfo);
+    const updatedInfo = await User.updateOne(
+    { _id: req.query.id },
+    { $set: { is_verified: 1 } }
+);
+console.log(updatedInfo); // Should now return { acknowledged: true, modifiedCount: 1 }
+
     res.render("email-verified");
   } catch (error) {
     console.log(error.message);
@@ -145,7 +146,7 @@ res.render("login");
 const verifyLogin = async (req, res) => {
   try {
     const email = req.body.email;
-    const password = req.body.password;
+const password = req.body.password;
 
     const userData = await User.findOne({ email: email });
 
@@ -247,7 +248,7 @@ const resetPassword = async (req, res) => {
       { $set: { password: secure_password, token: "" } }
     );
 
-    res.redirect("/");
+    res.redirect("/login");
   } catch (error) {
     console.log(error.message);
   }
@@ -286,53 +287,50 @@ const sentVerificationLink = async (req, res) => {
 };
 
 //for User Edit & Update Page Function
-const editLoad = async (req, res) => {
+const editLoad = async(req,res)=>{
   try {
     const id = req.query.id;
-    const userData = await User.findById({ _id: id });
+    const userData = await User.findOne({_id:id});
 
-    if (userData) {
-      res.render("edit", { user: userData });
-    } else {
-      res.redirect("/home");
-    }
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-//for User Edit & Update  Function
-const updateProfile = async (req, res) => {
-  try {
-    const email = req.body.email;
-    const name = req.body.name;
-    const mobile = req.body.mno;
-    const id = req.body.user_id;
-
-    if (req.file) {
-      const userData = await User.findByIdAndUpdate(
-        { _id: id },
-        {
-          $set: {
-            name: name,
-            email: email,
-            mobile: mobile,
-            image: req.file.filename,
-          },
-        }
-      );
-    } else {
-      const userData = await User.findByIdAndUpdate(
-        { _id: id },
-        { $set: { name: name, email: email, mobile: mobile } }
-      );
+    if(userData){
+      res.render('edit',{user:userData})
+    }else{
+      res.redirect('/home')
     }
 
-    res.redirect("/home");
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message)
   }
-};
+}
+const updateProfile = async(req,res)=>{
+    try {
+      
+    if(req.file){
+   
+      const updateData = await User.findByIdAndUpdate({_id:req.body.user_id},
+          {$set:{
+            image:req.file.filename,
+                name:req.body.name,
+                email:req.body.email,
+                mobile:req.body.mobile
+                 
+              }})
+    }else{
+      const updateData = await User.findByIdAndUpdate({_id:req.body.user_id},
+          {$set:{
+            
+                name:req.body.name,
+                email:req.body.email,
+                mobile:req.body.mobile
+                 
+              }});
+
+    }
+        res.redirect('/home');
+    } catch (error) {
+      console.log(error.message)
+    }
+}
 
 module.exports = {
   loadRegister,

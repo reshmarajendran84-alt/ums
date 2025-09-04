@@ -1,35 +1,44 @@
+const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
-const express = require("express");
+const session = require("express-session");
+const config = require("./config/config");
+const userRoute = require("./routes/userRoute");
+const bodyParser = require('body-parser');
 const app = express();
 
-// Connect to MongoDB
-mongoose.connect("mongodb://127.0.0.1:27017/user_management_system", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => {
-  console.log("MongoDB Connected");
-}).catch((err) => {
-  console.error("DB Connection Error:", err.message);
-});
+// Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
 
-// View engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+// Set EJS
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
-// Load routers
-const userRoute = require("./routes/userRoute");
-const adminRouter = require("./routes/adminRouter");
+// Session middleware
+app.use(
+  session({
+    secret: config.sessionSecret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 600000 }, // 10 minutes
+  })
+);
 
+// MongoDB Connection
+mongoose
+  .connect(config.mongoURI, {
+    // useNewUrlParser: true,
+    // useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.log(err));
+
+// Mount user routes
 app.use("/", userRoute);
-app.use("/admin", adminRouter);
-
-// Root route
-app.get("/", (req, res) => {
-  res.send("Welcome to the User Management System");
-});
 
 // Start server
-app.listen(3000, () => {
-  console.log(" Server is running on http://localhost:3000");
-});
+app.listen(3000, () =>
+  console.log("Server running on http://localhost:3000")
+);

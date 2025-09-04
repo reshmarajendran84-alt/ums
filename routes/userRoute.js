@@ -45,14 +45,13 @@ const userController = require("../controllers/userController");
 
 //for register page
 user_route.get("/register", auth.isLogout, userController.loadRegister);
-user_route.post("/register", upload.single("image"), userController.insertUser);
+user_route.post('/register', upload.single('image'), userController.insertUser);
 
 //for mailverify
 user_route.get("/verify", userController.verifyMail);
 
 //for login page
 user_route.get("/login", auth.isLogout, userController.loginLoad);
-user_route.get("/",auth.isLogout, userController.loginLoad);
 user_route.post("/login", userController.verifyLogin);
 
 //for home page
@@ -65,16 +64,17 @@ user_route.get("/logout", auth.isLogin, userController.userLogout);
 user_route.get("/forget", auth.isLogout, userController.forgetLoad);
 user_route.post("/forget", userController.forgetVerify);
 
-//for forgetPassword page 
-user_route.get("/forget-password",auth.isLogout, userController.forgetPasswordLoad);
-user_route.post("/forget-password", userController.resetPassword);
+// forget password
+user_route.get('/forget-password', auth.isLogout, userController.forgetPasswordLoad);
+user_route.post('/forget-password', userController.resetPassword);
 
 //for verification mail page
 user_route.get("/verification", userController.verificationLoad);
 user_route.post("/verification", userController.sentVerificationLink);
 
-//for edit page
-user_route.get("/edit",auth.isLogin, userController.editLoad);
-user_route.post("/edit",upload.single("image"), userController.updateProfile);
+// Edit profile routes
+user_route.get("/edit", auth.isLogin, userController.editLoad);
+user_route.post("/edit", upload.single('image'), userController.updateProfile);
+
 
 module.exports = user_route;

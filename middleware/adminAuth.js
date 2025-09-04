@@ -1,29 +1,12 @@
-const isLogin = async (req,res,next) => {
-  try {
-    if(req.session.user_id){
-      next()
-    }else{
-      res.redirect('/admin')
-    }
-  } catch (error) {
-    console.log(error.message);
-  }
-}
+// middleware/adminAuth.js
+const isLogin = (req, res, next) => {
+  if (req.session.admin_id) next();
+  else res.redirect("/admin");
+};
 
-const isLogout = async (req,res,next) => {
-  try {
-    if(req.session.user_id){
-      res.redirect('/admin/home')
-    }else[
-      next()
-    ]
-  } catch (error) {
-    console.log(error.message);
-  }
-}
+const isLogout = (req, res, next) => {
+  if (req.session.admin_id) res.redirect("/admin/home");
+  else next();
+};
 
-
-module.exports = {
-  isLogin,
-  isLogout
-}
+module.exports = { isLogin, isLogout };  // ✅ important

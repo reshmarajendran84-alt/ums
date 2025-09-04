@@ -1,22 +1,66 @@
 <%- include('../layouts/header') %>
 
-<h1>LOGIN</h1>
+ <br>
+<br>
+    <div class="cont">
+        <div class="form sign-in">
+         
 
-<%
+<!-- <form action="/login" method="post"> -->
+    <!-- Background spheres -->
+     <form action="/login" method="POST" class="space-y-6"enctype="multipart/form-data">
+
+    <div class="sphere sphere-1"></div>
+    <div class="sphere sphere-2"></div>
+    <div class="sphere sphere-3"></div>
+    
+    <!-- Main login card -->
+    <div class="glass-card">
+        <div class="text-center mb-8">
+            <%
 if(typeof message !== 'undefined'){
     %>
-    <h4><%= message %></h4>
+    <h4 style="color: white;"><%= message %></h4>
     <%
 }
 %>
-<form action="/login" method="post">
-    <input type="email" name="email" required placeholder="Enter Email">
-    <br><br>
-    <input type="password" name="password"required placeholder="Enter Password" id="">
-    <br><br>
-    <input type="submit" value="LOGIN">
+            <h1 class="text-4xl font-bold title mb-2">Welcome Back</h1>
+            <p class="text-white opacity-80">Sign in to your account</p>
+        </div>
         
-</form>
-<a href="/forget">forget Password</a>
+        <!-- <form class="space-y-6"> -->
+            <div class="space-y-4">
+                <div>
+                    <div class="flex items-center mb-1">
+                        <i class="fas fa-envelope text-white mr-2 opacity-80"></i>
+                        <label for="email" class="text-white text-sm opacity-80">Email Address</label>
+                    </div>
+                    <input type="email" id="email"name="email" class="input-field" placeholder="Enter your email">
+                </div>
+                
+                <div>
+                    <div class="flex items-center mb-1">
+                        <i class="fas fa-lock text-white mr-2 opacity-80"></i>
+                        <label for="password" class="text-white text-sm opacity-80">Password</label>
+                    </div>
+                    <input type="password"name="password" id="password" class="input-field" placeholder="Enter your password">
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              
+                <a href="forget" class="text-white text-sm opacity-80 hover:opacity-100 hover:text-cyan-300 transition">Forgot password?</a>
+            </div>
+            
+            <button type="submit" class="w-full btn-login font-medium">LOGIN</button>
+        </form>
+        
+        
+        
+        <div class="text-center mt-8">
+            <p class="text-white text-sm opacity-80">Don't have an account? <a href="register" class="font-medium hover:opacity-100 text-cyan-300 transition">Sign up</a></p>
+        </div>
+    </div>
+    
 
 <% include('../layouts/footer.ejs') %>

@@ -1,28 +1,35 @@
+<%- include('../layouts/header') %>
+<div class="cont">
 
-
-
-<% include("../layouts/header.ejs")%>
-
-<h1>Recovery mode</h1>
+    <h1 class="text-2xl font-bold mb-4">Recovery mode</h1>
 
 <% if (typeof message !== "undefined") { %>
-  <div id="msg" style="color: red;"><%= message %></div>
-  <script>
-    setTimeout(() => {
-      document.getElementById('msg').style.display = 'none';
-    }, 5000);
-  </script>
-<% } %>
+  <div id="msg" style="color: red;"><%= message %>
+  <%}%>
+</div>
+ 
+ 
+<div>
+<form action="/admin/forget" method="post"class="space-y-6">
+          <div class="space-y-4">
 
-<form action="/admin/forget" method="post">
-    <br><br>
-    <input type="email" name="email" placeholder="enter email" required>
-    <br><br>
-    <input type="submit" value="Send Reset Link" >
-
-
+   <div>
+                <div class="flex items-center mb-1">
+                    <i class="fas fa-envelope text-white mr-2 opacity-80"></i>
+                    <label for="email" class="text-white text-sm opacity-80">Email Address</label>
+                </div>
+                <input type="email" id="email" name="email" class="input-field" placeholder="Enter your email" required>
+            </div>
+    <input type="submit" class="btn-login w-full mt-4"value="Send Reset Link">
 
 </form><br>
 
+    <div class="mt-4">
+        <a href="/admin/login" class="text-cyan-300 hover:opacity-100 transition">Back to Login</a>
+    </div>
+    </div>
+</div>
 
-<% include("../layouts/footer.ejs")%>
+<%- include('../layouts/footer') %>
+
+

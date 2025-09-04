@@ -1,22 +1,32 @@
-!<% include('../layouts/header.ejs') %>
+<%- include('../layouts/header') %>
 
-<h1>FORGET PASSWORD</h1>
+<div class="cont">
+    <h1 class="text-2xl font-bold mb-4">Forget Password</h1>
 
-<%
-if(typeof message !== 'undefined'){
-    %>
-    <h4><%= message %></h4>
-    <%
-}
-%>
-<form action="/forget" method="post">
-    <input type="email" name="email" required placeholder="Enter Email">
-    <br><br>
-    <input type="password" name="password"required placeholder="Enter Password" id="">
-    <br><br>
-    <input type="submit" value="SET PASSWORD">
-        
-</form>
-<a href="/forget">forget Password</a>
+    <% if (typeof message !== 'undefined' && message) { %>
+        <h4 style="color: green; font-weight: bold; margin-bottom: 10px;"><%= message %></h4>
+    <% } %>
 
-<% include('../layouts/footer.ejs') %>
+    <form  method="POST" class="space-y-6">
+        <div class="space-y-4">
+            <!-- Email -->
+            <div>
+                <div class="flex items-center mb-1">
+                    <i class="fas fa-envelope text-white mr-2 opacity-80"></i>
+                    <label for="email" class="text-white text-sm opacity-80">Email Address</label>
+                </div>
+                <input type="email" id="email" name="email" class="input-field" placeholder="Enter your email" required>
+            </div>
+
+                  <input type="submit" class="btn-login w-full mt-4" value="Reset Password">
+
+
+        <!-- <button type="submit" class="btn-login w-full mt-4">Set Password</button> -->
+    </form>
+
+    <div class="mt-4">
+        <a href="/login" class="text-cyan-300 hover:opacity-100 transition">Back to Login</a>
+    </div>
+</div>
+
+<%- include('../layouts/footer') %>
