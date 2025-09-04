@@ -1,43 +1,34 @@
 const express = require("express");
-const adminAuth = require("../middleware/adminAuth");
+const router = express.Router();
 const adminController = require("../controllers/adminController");
 
-const router = express.Router();
-
-// login page
-router.get("/", adminAuth.isLogout, adminController.loginLoad);
-router.post("/", adminController.verifyLogin);
-// Login page (GET - show login form)
+// Admin Login
 router.get("/login", adminController.loginLoad);
-
-// Login submit (POST - handle login form)
 router.post("/login", adminController.verifyLogin);
-// home page
-router.get("/home", adminAuth.isLogin, adminController.loadDashboard);
 
-// logout
-router.get("/logout", adminAuth.isLogin, adminController.logoutLoad);
+// Admin Logout
+router.get("/logout", adminController.logoutLoad);
 
-// forget password
-router.get("/forget", adminAuth.isLogout, adminController.forgetLoad);
-router.post("/forget", adminController.forgetVerify);
-
-// reset password
-router.get("/forget-password", adminAuth.isLogout, adminController.forgetPasswordLoad);
-router.post("/forget-password", adminController.forgetPasswordVerify);
-
-// dashboard
+// Admin Dashboard
 router.get("/dashboard", adminController.loadDashboard);
 
-// add user
-router.get("/addUser", adminAuth.isLogin, adminController.addUserLoad);
-router.post("/addUser", adminController.addUserVerify);
+// Forget Password
+router.get("/forget", adminController.forgetLoad);
+router.post("/forget", adminController.forgetVerify);
 
-// edit user
-router.get("/edit", adminAuth.isLogin, adminController.editUserLoad);
-router.post("/edit", adminController.updateProfile);
+// Reset Password
+router.get("/forget-password", adminController.forgetPasswordLoad);
+router.post("/forget-password", adminController.forgetPasswordVerify);
 
-// delete user
-router.get("/deleteUser", adminAuth.isLogin, adminController.deleteUser);
+// Add User
+router.get("/add-user", adminController.addUserLoad);
+router.post('/add-user', adminController.addUserVerify);
+
+// Edit User
+router.get("/edit-user", adminController.editUserLoad);
+router.post("/edit-user", adminController.updateProfile);
+
+// Delete User
+router.get("/delete-user", adminController.deleteUser);
 
 module.exports = router;

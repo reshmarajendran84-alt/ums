@@ -6,6 +6,7 @@ const config = require("./config/config");
 const userRoute = require("./routes/userRoute");
 const bodyParser = require('body-parser');
 const app = express();
+const adminRoute = require("./routes/adminRouter");
 
 // Middlewares
 app.use(express.json());
@@ -37,6 +38,7 @@ mongoose
 
 // Mount user routes
 app.use("/", userRoute);
+app.use("/admin", adminRoute);
 
 // Start server
 app.listen(3000, () =>
