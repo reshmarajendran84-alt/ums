@@ -1,5 +1,4 @@
-const Admin = require("../models/adminModel");
-const User = require("../models/userModel"); // for managing normal users
+const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const randomstring = require("randomstring");
 const nodemailer = require("nodemailer");
@@ -36,10 +35,11 @@ const loginLoad = (req, res) => {
   res.render("admin/login", { message: "" });
 };
 
+// Verify Login
 const verifyLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const admin = await Admin.findOne({ email });
+    const admin = await User.findOne({ email, is_admin: 1 });
 
     if (!admin) return res.render("admin/login", { message: "Email is incorrect" });
 
@@ -56,10 +56,9 @@ const verifyLogin = async (req, res) => {
 
 // Dashboard / Home
 const loadDashboard = async (req, res) => {
-  const admins = await Admin.find();
-  res.render("admin/dashboard", { admins });
+  const users = await User.find({ is_admin: 0 });
+  res.render("admin/dashboard", { users });
 };
-
 
 // Logout
 const logoutLoad = (req, res) => {
@@ -68,54 +67,45 @@ const logoutLoad = (req, res) => {
 };
 
 // Forget Password Page
-const forgetLoad = (req, res) => res.render("admin/forget", { message: "" });
+const forgetLoad = (req, res) => {
+  res.render("admin/forget", { message: "" });
+};
 
+// Forget Password Verify
 const forgetVerify = async (req, res) => {
   try {
     const { email } = req.body;
-    const admin = await Admin.findOne({ email });
+    const admin = await User.findOne({ email, is_admin: 1 });
     if (!admin) return res.render("admin/forget", { message: "Admin not found" });
 
     const token = randomstring.generate();
-    await Admin.findByIdAndUpdate(admin._id, { token });
-
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: { user: config.emailUser, pass: config.emailPassword }
-    });
-
-    await transporter.sendMail({
-      from: config.emailUser,
-      to: admin.email,
-      subject: "Reset Password",
-      html: `<p>Hi, click <a href="http://localhost:3000/admin/forget-password?token=${token}">here</a> to reset password</p>`
-    });
+    await User.findByIdAndUpdate(admin._id, { token });
+    await sendResetPasswordMail(admin.name, admin.email, token);
 
     res.render("admin/forget", { message: "Check your email to reset password" });
-  } catch (err) {
-    console.log(err.message);
+  } catch (error) {
+    console.log(error.message);
   }
 };
-
 
 // Reset Password Page
 const forgetPasswordLoad = async (req, res) => {
   const { token } = req.query;
-  const admin = await Admin.findOne({ token });
+  const admin = await User.findOne({ token, is_admin: 1 });
   if (!admin) return res.render("admin/forget-password", { message: "Invalid link", admin_id: null });
 
   res.render("admin/forget-password", { admin_id: admin._id, message: "" });
 };
 
+// Reset Password Verify
 const forgetPasswordVerify = async (req, res) => {
   const { password, admin_id } = req.body;
   const hashed = await bcrypt.hash(password, 10);
-  await Admin.findByIdAndUpdate(admin_id, { password: hashed, token: "" });
+  await User.findByIdAndUpdate(admin_id, { password: hashed, token: "" });
 
   res.render("admin/login", { message: "Password reset successful" });
 };
+
 // Add User Page
 const addUserLoad = (req, res) => res.render("admin/addUser", { message: "" });
 

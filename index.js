@@ -36,6 +36,14 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 
+// Home Page
+app.get("/", (req, res) => {
+  res.render("layouts/homepage");
+});
+app.get("/homepage", (req, res) => {
+res.render("layouts/homepage");
+});
+
 // Mount user routes
 app.use("/", userRoute);
 app.use("/admin", adminRoute);
