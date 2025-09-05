@@ -30,7 +30,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  token: { type: String, default: "" }
+  token: { type: String, default: "" },
+    // is_admin: { type: Number, default: 1 }, // 1 = admin
+
+
 
 });
 

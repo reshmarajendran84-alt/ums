@@ -154,7 +154,7 @@ const password = req.body.password;
       const passwordMatch = await bcrypt.compare(password, userData.password);
 
       if (passwordMatch) {
-        if (userData.is_varified === 0) {
+if (userData.is_verified === 0) {
           res.render("login", { message: "Please verify your mail." });
         } else {
           req.session.user_id = userData._id;
