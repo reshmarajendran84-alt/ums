@@ -2,7 +2,6 @@
 <title>Add User</title>
 
 <div class="form sign-up">
-
   <form action="/admin/add-user" method="POST" enctype="multipart/form-data" class="space-y-6">
     <!-- Background spheres -->
     <div class="sphere sphere-1"></div>
@@ -17,8 +16,8 @@
       </div>
 
       <% if (typeof message !== 'undefined' && message) { %>
-        <div style="color: rgb(240, 246, 240); font-weight: bold; margin-bottom: 10px;">
-            <%= message %>
+        <div class="message-box">
+          <%= message %>
         </div>
       <% } %>
 
@@ -49,9 +48,21 @@
           </div>
           <input type="text" name="mobile" id="mobile" placeholder="Enter Mobile Number" required class="input-field">
         </div>
+      </div>
 
-        <!-- Upload Image -->
-        <div>
-          <div class="flex items-center mb-1">
-            <i class="fas fa-upload text-white mr-2 opacity-80"></i>
-            <label for="image" class="text-white opacity-80">Up
+      <!-- Submit Button -->
+      <div class="mt-6 text-center">
+        <button type="submit" class="btn btn-submit">Add User</button>
+            <a href="/admin/dashboard" class="btn btn-back">⬅ Go Back</a>
+
+      </div>
+    </div>
+    <!-- Back Link -->
+  <div class="text-center mt-4">
+  </div>
+</div>
+  </form>
+
+  
+
+<%- include('../layouts/footer') %>

@@ -1,15 +1,66 @@
-<% include("../layouts/header.ejs") %> <!-- Include the shared header layout -->
+<%- include("../layouts/header.ejs") %> <!-- Include the shared header layout -->
 
+<title>Edit User</title>
 
-  <title>Edit User</title>
-  <h2>Edit User</h2>
-  <form action="/admin/edit-user" method="POST">
-    <input type="hidden" name="id" value="<%= user._id %>" />
-    <input type="text" name="name" value="<%= user.name %>" required /><br/>
-    <input type="email" name="email" value="<%= user.email %>" required /><br/>
-    <input type="text" name="mobile" value="<%= user.mobile %>" /><br/>
-    <button type="submit">Update User</button>
+<div class="form sign-up">
+<!-- Background spheres -->
+<div class="sphere sphere-1"></div>
+<div class="sphere sphere-2"></div>
+<div class="sphere sphere-3"></div>
+
+<!-- Main card -->
+<div class="glass-card">
+  <div class="text-center mb-8">
+    <h2 class="text-4xl font-bold title mb-2">Edit User</h2>
+  </div>
+
+  <!-- Edit Form -->
+  <form action="/admin/edit-user" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <input type="hidden" name="id" value="<%= user.id %>" />
+
+    <div class="space-y-4">
+      <!-- Name -->
+      <div>
+        <div class="flex items-center mb-1">
+          <i class="fas fa-user text-white mr-2 opacity-80"></i>
+          <label for="name" class="text-white opacity-80">Name</label>
+        </div>
+        <input type="text" name="name" id="name" placeholder="Enter Name"
+                value="<%= user.name %>" required class="input-field">
+      </div>
+
+      <!-- Email -->
+      <div>
+        <div class="flex items-center mb-1">
+          <i class="fas fa-envelope text-white mr-2 opacity-80"></i>
+          <label for="email" class="text-white opacity-80">Email</label>
+        </div>
+        <input type="email" name="email" id="email" placeholder="Enter Email"
+                value="<%= user.email %>" required class="input-field">
+      </div>
+
+      <!-- Mobile Number -->
+      <div>
+        <div class="flex items-center mb-1">
+          <i class="fas fa-phone text-white mr-2 opacity-80"></i>
+          <label for="mobile" class="text-white opacity-80">Mobile Number</label>
+        </div>
+        <input type="text" name="mobile" id="mobile" placeholder="Enter Mobile Number"
+                value="<%= user.mobile %>" required class="input-field">
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="mt-6 text-center">
+      <button type="submit" class="btn btn-submit">Update User</button>
+    </div>
   </form>
-  <a href="/admin/dashboard">Back to Dashboard</a>
+</div>
 
-<% include("../layouts/footer.ejs") %> <!-- Include the shared footer layout -->
+<!-- Back Link -->
+<div class="text-center mt-4">
+  <a href="/admin/dashboard" class="btn btn-back">⬅ Back to Dashboard</a>
+</div>
+</div>
+
+<%- include("../layouts/footer.ejs") %>
