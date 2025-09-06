@@ -23,7 +23,7 @@ app.use(
     secret: config.sessionSecret,
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 600000 }, // 10 minutes
+    cookie: { secure: false }, 
   })
 );
 

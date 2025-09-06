@@ -39,18 +39,28 @@ const loginLoad = (req, res) => {
 const verifyLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    // 1. Find admin by email
     const admin = await User.findOne({ email, is_admin: 1 });
 
-    if (!admin) return res.render("admin/login", { message: "Email is incorrect" });
+    // 2. If no admin found
+    if (!admin) {
+      return res.render("admin/login", { message: "Invalid email or password" });
+    }
 
+    // 3. Check password
     const match = await bcrypt.compare(password, admin.password);
-    if (!match) return res.render("admin/login", { message: "Incorrect password" });
+    if (!match) {
+      return res.render("admin/login", { message: "Invalid email or password" });
+    }
 
+    // 4. Save session and redirect
     req.session.admin_id = admin._id;
     res.redirect("/admin/dashboard");
+
   } catch (error) {
     console.log(error.message);
-    res.render("admin/login", { message: "Something went wrong" });
+    res.render("admin/login", { message: "Something went wrong, try again" });
   }
 };
 
@@ -90,11 +100,12 @@ const forgetVerify = async (req, res) => {
 
 // Reset Password Page
 const forgetPasswordLoad = async (req, res) => {
-  const { token } = req.query;
-  const admin = await User.findOne({ token, is_admin: 1 });
-  if (!admin) return res.render("admin/forget-password", { message: "Invalid link", admin_id: null });
-
-  res.render("admin/forget-password", { admin_id: admin._id, message: "" });
+  try {
+    const userId = req.query.id || req.params.id; // depends on how you're sending it
+    res.render("admin/forget-password", { user_id: userId });
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 // Reset Password Verify
@@ -113,7 +124,7 @@ const addUserLoad = (req, res) => res.render("admin/addUser", { message: "" });
 const addUserVerify = async (req, res) => {
   try {
     const { name, email, mobile } = req.body;
-    const password = randomstring.generate(8);
+    const password = randomstring.generate(8); // generate random password
     const hashed = await securePassword(password);
 
     const user = new User({ name, email, mobile, password: hashed, is_admin: 0 });
@@ -124,6 +135,7 @@ const addUserVerify = async (req, res) => {
     res.render("admin/addUser", { message: "Error adding user" });
   }
 };
+
 
 // Edit User Page
 const editUserLoad = async (req, res) => {

@@ -1,12 +1,16 @@
 // middleware/adminAuth.js
 const isLogin = (req, res, next) => {
-  if (req.session.admin_id) next();
-  else res.redirect("/admin");
+  if (req.session.admin_id) {
+    return next();
+  }
+  res.redirect("/admin/login");
 };
 
 const isLogout = (req, res, next) => {
-  if (req.session.admin_id) res.redirect("/admin/home");
-  else next();
+  if (!req.session.admin_id) {
+    return next();
+  }
+  res.redirect("/admin/dashboard");
 };
 
-module.exports = { isLogin, isLogout };  // ✅ important
+module.exports = { isLogin, isLogout };

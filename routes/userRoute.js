@@ -2,7 +2,6 @@ const express = require("express");
 const user_route = express();
 const bodyPraser = require("body-parser");
 const multer = require("multer");
-// const nocache = require('nocache')
 const path = require("path");
 const session = require("express-session");
 const config = require("../config/config");
@@ -16,7 +15,6 @@ user_route.use(bodyPraser.json());
 user_route.use(bodyPraser.urlencoded({ extended: true }));
 
 //for session save
-// user_route.use(nocache());
 user_route.use(
   session({
     secret: config.sessionSecret,
